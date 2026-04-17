@@ -28,6 +28,7 @@
     background: linear-gradient(180deg, rgba(26,15,8,0.6) 0%, rgba(26,15,8,0.88) 55%, rgba(26,15,8,0.98) 100%),
       url("./background.jpg") center/cover;
     display: flex; flex-direction: column; justify-content: center; align-items: center;
+    position: relative; overflow: hidden;
   }
 
   .game-logo {
@@ -288,15 +289,16 @@
     left: 50%;
     transform: translate(-50%, -50%) scale(0.2);
     font-family: 'Hiragino Mincho ProN', 'Yu Mincho', serif;
-    font-size: 3.2rem;
+    font-size: 2.6rem;
     font-weight: 900;
-    letter-spacing: 0.15em;
+    letter-spacing: 0.05em;
     color: transparent;
-    -webkit-text-stroke: 3px #fff;
+    -webkit-text-stroke: 2.5px #fff;
     background: linear-gradient(180deg, #fff9e0 0%, #f4c95d 40%, #fff 60%, #e8a41c 90%);
     -webkit-background-clip: text; background-clip: text;
-    filter: drop-shadow(0 0 20px rgba(255,255,255,1)) drop-shadow(6px 6px 0 #5a1a1a) drop-shadow(10px 10px 20px rgba(0,0,0,0.9));
+    filter: drop-shadow(0 0 20px rgba(255,255,255,1)) drop-shadow(5px 5px 0 #5a1a1a) drop-shadow(8px 8px 16px rgba(0,0,0,0.9));
     white-space: nowrap;
+    max-width: 95vw;
     animation: specialTitleIn 1.2s cubic-bezier(0.3, 1.5, 0.5, 1) forwards;
     z-index: 92;
   }
@@ -313,13 +315,15 @@
     left: 50%;
     transform: translateX(-50%);
     color: #fff6d5;
-    font-size: 0.95rem;
-    letter-spacing: 0.3em;
+    font-size: 0.78rem;
+    letter-spacing: 0.2em;
     font-style: italic;
     text-shadow: 0 2px 4px rgba(0,0,0,0.9), 0 0 20px rgba(244,201,93,0.8);
     opacity: 0;
     animation: subtitleFade 1s 0.4s ease-out forwards;
     white-space: nowrap;
+    max-width: 92vw;
+    text-align: center;
     z-index: 92;
   }
   @keyframes subtitleFade {
@@ -373,30 +377,69 @@
   /* === Sheep for victory === */
   .sheep-dance {
     position: absolute;
-    font-size: 1.8rem;
+    font-size: 2rem;
     pointer-events: none;
     z-index: 15;
-    animation: sheepDance 0.6s ease-in-out infinite;
+    animation: sheepDance 0.55s ease-in-out infinite;
     filter: drop-shadow(0 3px 6px rgba(0,0,0,0.5));
   }
   @keyframes sheepDance {
     0%,100% { transform: translateY(0) rotate(-5deg) scaleX(1); }
-    25% { transform: translateY(-12px) rotate(8deg) scaleX(1.1); }
-    50% { transform: translateY(-6px) rotate(-8deg) scaleX(-1); }
-    75% { transform: translateY(-14px) rotate(5deg) scaleX(-1.1); }
+    25% { transform: translateY(-22px) rotate(10deg) scaleX(1.1); }
+    50% { transform: translateY(-4px) rotate(-10deg) scaleX(-1); }
+    75% { transform: translateY(-26px) rotate(7deg) scaleX(-1.1); }
   }
 
   /* David's dance mode (intense) */
   .character.player.dancing .body {
-    animation: davidDance 0.5s ease-in-out infinite;
+    animation: davidDance 1.2s ease-in-out infinite;
   }
   @keyframes davidDance {
-    0%,100% { transform: translateY(0) rotate(-6deg) scale(1.05); }
-    25% { transform: translateY(-20px) rotate(10deg) scale(1.1); }
-    50% { transform: translateY(-10px) rotate(-10deg) scale(1.05); }
-    75% { transform: translateY(-25px) rotate(8deg) scale(1.12); }
+    0%,100% { transform: translateY(0) rotate(-4deg) scale(1.03); }
+    25% { transform: translateY(-12px) rotate(5deg) scale(1.06); }
+    50% { transform: translateY(-6px) rotate(-5deg) scale(1.03); }
+    75% { transform: translateY(-14px) rotate(4deg) scale(1.07); }
   }
 
+  /* === Title bouncing ball === */
+  .title-ball {
+    position: absolute;
+    width: 36px; height: 36px;
+    border-radius: 50%;
+    background:
+      radial-gradient(circle at 32% 28%, rgba(255,255,255,0.75) 0%, rgba(255,255,255,0.2) 6%, transparent 14%),
+      radial-gradient(circle at 50% 50%, #e53935 0%, #c62828 50%, #8a1515 85%, #4a0a0a 100%);
+    box-shadow: 0 4px 10px rgba(0,0,0,0.7), inset -4px -4px 8px rgba(0,0,0,0.35), inset 3px 3px 6px rgba(255,150,150,0.3);
+    bottom: 50px;
+    left: -50px;
+    animation: titleBallBounce 7s ease-in-out infinite;
+    z-index: 5;
+    overflow: hidden;
+  }
+  .title-ball::before {
+    content: ""; position: absolute;
+    top: 48%; left: -5%; right: -5%; height: 2px;
+    background: rgba(0,0,0,0.4); border-radius: 2px;
+    transform: rotate(15deg);
+    box-shadow: 0 2px 0 rgba(255,255,255,0.2);
+  }
+  @keyframes titleBallBounce {
+    0%   { left: -50px; bottom: 50px; transform: rotate(0deg); }
+    10%  { bottom: 200px; }
+    20%  { bottom: 50px; }
+    28%  { bottom: 170px; }
+    36%  { bottom: 50px; }
+    44%  { bottom: 150px; }
+    52%  { bottom: 50px; }
+    60%  { bottom: 130px; }
+    68%  { bottom: 50px; }
+    76%  { bottom: 110px; }
+    84%  { bottom: 50px; }
+    95%  { left: calc(100% + 50px); bottom: 90px; }
+    100% { left: calc(100% + 50px); bottom: 50px; transform: rotate(1800deg); }
+  }
+
+  
   /* === Speech bubble === */
   .speech-bubble {
     position: absolute;
@@ -501,6 +544,138 @@
   .flash-overlay.crit-flash { background: radial-gradient(circle, rgba(251,191,36,0.7), rgba(220,38,38,0.5)); animation: flashOut 0.5s ease-out forwards; }
   @keyframes flashOut { from { opacity: 1; } to { opacity: 0; } }
 
+
+  /* === Results Screen === */
+  .results-screen {
+    min-height: 100vh;
+    padding: 30px 18px 40px;
+    background: linear-gradient(180deg, rgba(26,15,8,0.88) 0%, rgba(26,15,8,0.96) 100%),
+      url("./background.jpg") center/cover fixed;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 18px;
+  }
+  .results-header { text-align: center; margin-bottom: 6px; }
+  .gover-icon-small { font-size: 3rem; text-shadow: 0 0 20px rgba(244,201,93,0.8); margin-bottom: 4px; }
+  .results-title { font-size: 2rem; letter-spacing: 0.2em; text-shadow: 3px 3px 0 #1a0f08, 0 0 20px currentColor; margin-bottom: 6px; }
+  .results-title.win { color: #f4c95d; }
+  .results-title.lose { color: #dc2626; }
+  .results-subtitle { color: #e8c896; font-size: 0.9rem; letter-spacing: 0.1em; font-style: italic; text-shadow: 0 2px 4px rgba(0,0,0,0.7); }
+
+  .rank-display {
+    background: rgba(26,15,8,0.85);
+    border: 2px solid #8b6a2a;
+    border-radius: 12px;
+    padding: 18px 20px;
+    max-width: 360px;
+    width: 100%;
+    text-align: center;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.6);
+  }
+  .rank-label { color: #d4a04e; font-size: 0.75rem; letter-spacing: 0.3em; }
+  .rank-letter {
+    font-family: 'Georgia', serif;
+    font-size: 5rem; font-weight: 900; font-style: italic;
+    line-height: 1;
+    margin: 4px 0;
+  }
+  .rank-stats {
+    display: flex;
+    justify-content: center;
+    align-items: baseline;
+    gap: 10px;
+    margin: 10px 0 8px;
+    font-family: 'Georgia', serif;
+  }
+  .rank-stats > div { display: flex; flex-direction: column; align-items: center; }
+  .stat-num { font-size: 1.6rem; font-weight: bold; }
+  .stat-lbl { font-size: 0.7rem; color: #d4a04e; letter-spacing: 0.1em; }
+  .stat-divider { color: #8b6a2a; font-size: 1.2rem; padding: 0 2px; }
+  .rank-comment { color: #f4e4c1; font-size: 0.85rem; font-style: italic; line-height: 1.6; margin-top: 4px; }
+
+  .result-section {
+    background: rgba(26,15,8,0.82);
+    border-radius: 12px;
+    padding: 14px 16px;
+    max-width: 360px;
+    width: 100%;
+    box-shadow: 0 3px 12px rgba(0,0,0,0.5);
+  }
+  .result-section.correct { border: 1px solid #22c55e; }
+  .result-section.wrong { border: 1px solid #dc2626; }
+  .result-section h3 {
+    font-size: 0.88rem;
+    letter-spacing: 0.1em;
+    margin-bottom: 10px;
+    padding-bottom: 6px;
+    border-bottom: 1px solid rgba(244,201,93,0.2);
+  }
+  .result-section.correct h3 { color: #4ade80; }
+  .result-section.wrong h3 { color: #f87171; }
+  .verse-item {
+    padding: 8px 0;
+    border-bottom: 1px dashed rgba(139,106,42,0.3);
+  }
+  .verse-item:last-child { border-bottom: none; }
+  .verse-text { color: #f4e4c1; font-size: 0.88rem; line-height: 1.5; }
+  .verse-meta { color: #d4a04e; font-size: 0.72rem; margin-top: 3px; line-height: 1.4; }
+  .verse-more { color: #8b6a2a; font-size: 0.78rem; text-align: center; margin-top: 6px; font-style: italic; }
+
+  .episode-card {
+    background: linear-gradient(180deg, rgba(41,23,10,0.95) 0%, rgba(26,15,8,0.95) 100%);
+    border: 2px solid #f4c95d;
+    border-radius: 12px;
+    padding: 18px 18px;
+    max-width: 360px;
+    width: 100%;
+    box-shadow: 0 4px 24px rgba(244,201,93,0.15), 0 4px 12px rgba(0,0,0,0.6);
+    position: relative;
+  }
+  .episode-card::before {
+    content: "📜";
+    position: absolute;
+    top: -14px; left: 16px;
+    background: #1a0f08;
+    padding: 4px 8px;
+    border: 1px solid #f4c95d;
+    border-radius: 50%;
+    font-size: 1.2rem;
+  }
+  .episode-label { color: #f4c95d; font-size: 0.72rem; letter-spacing: 0.2em; margin-bottom: 4px; }
+  .episode-title {
+    color: #fff6d5;
+    font-size: 1.05rem;
+    margin-bottom: 10px;
+    letter-spacing: 0.05em;
+    font-weight: bold;
+  }
+  .episode-body {
+    color: #f4e4c1;
+    font-size: 0.88rem;
+    line-height: 1.75;
+    margin-bottom: 12px;
+    text-align: justify;
+  }
+  .episode-ref {
+    color: #f4c95d;
+    font-size: 0.82rem;
+    text-align: right;
+    font-weight: bold;
+    padding-top: 8px;
+    border-top: 1px dashed rgba(244,201,93,0.3);
+  }
+
+  .closing-msg {
+    color: #e8c896;
+    font-size: 0.85rem;
+    line-height: 1.8;
+    text-align: center;
+    max-width: 360px;
+    padding: 10px 0;
+    font-style: italic;
+  }
+
   .gameover-screen { text-align: center; padding: 60px 20px; min-height: 100vh; background: linear-gradient(180deg, rgba(26,15,8,0.7), rgba(26,15,8,0.95)), url("./background.jpg") center/cover; display: flex; flex-direction: column; justify-content: center; align-items: center; }
   .gameover-screen .gover-icon { font-size: 4rem; color: #f4c95d; margin: 6px 0; text-shadow: 0 0 24px rgba(244,201,93,0.8); }
   .gameover-screen h2 { font-size: 2.4rem; margin-bottom: 12px; letter-spacing: 0.2em; text-shadow: 3px 3px 0 #1a0f08, 0 0 24px currentColor; }
@@ -522,6 +697,83 @@
 <script>
   const DAVID_IMG = "./david.png";
   const GOLIATH_IMG = "./goliath.png";
+  const SAUL_IMG = "./saul.png";
+
+  // 敵データベース
+  const enemies = {
+    goliath: {
+      name: "ゴリアテ",
+      img: "./goliath.png",
+      hpMax: 100,
+      turnTime: 7000,
+      aiCorrectRate: 0.6,
+      cutinQuotes: [
+        { text: "小童よ、我が剣の錆となれ！", ref: "ペリシテの大将" },
+        { text: "我が名はゴリアテ、イスラエルの軍を侮る者！", ref: "Iサムエル 17:10" },
+        { text: "その石ころで何ができると言うのだ？", ref: "ペリシテの大将" },
+        { text: "貴様の肉を空の鳥と野の獣にくれてやる！", ref: "Iサムエル 17:44" },
+        { text: "我は汝らの神をも恐れぬ！", ref: "ペリシテの大将" },
+        { text: "来たれ小僧、引導を渡してやろう！", ref: "ペリシテの大将" }
+      ],
+      threatLines: [
+        "我が力を見よ！",
+        "ペリシテの威光、思い知れ！",
+        "イスラエルの神に挑戦する！",
+        "小僧、これが最後だ！",
+        "我が前にひれ伏せ！",
+        "貴様を野の獣に喰わせてやる！"
+      ],
+      reactionLines: [
+        "小僧が...面白い！",
+        "ふん、笑止千万！",
+        "神だと？見せてみろ！",
+        "その石で何ができる？",
+        "貴様を粉々にしてやる！",
+        "イスラエルの子供よ、覚悟せよ",
+        "ぬかせ小童！",
+        "貴様の神はどこにいる？",
+        "潰してくれるわ！",
+        "ハハハ！面白い見世物だ"
+      ]
+    },
+    saul: {
+      name: "サウロ",
+      img: "./saul.png",
+      hpMax: 140,  // 高HP
+      turnTime: 4500,  // 短い判定時間
+      aiCorrectRate: 0.8,  // 賢い
+      trickyMode: true,  // 紛らわしい聖句を優先
+      cutinQuotes: [
+        { text: "わたしは、わたしが何をしているか、自分でわからない", ref: "ローマ 7:15" },
+        { text: "若造、王である我に逆らうのか！", ref: "サウロ王" },
+        { text: "ダビデよ、なぜ我を苦しめる？", ref: "Iサムエル 18:9" },
+        { text: "嫉妬は墓のように残酷である", ref: "雅歌 8:6" },
+        { text: "槍よ、彼を壁に突き刺せ！", ref: "Iサムエル 18:11" },
+        { text: "我こそイスラエルの初代王なり！", ref: "サウロ王" },
+        { text: "狂気に飲まれた王の怒りを見よ！", ref: "サウロ王" }
+      ],
+      threatLines: [
+        "我が槍を食らえ！",
+        "王の怒りを知るがよい！",
+        "ダビデよ、逃げ場はないぞ！",
+        "イスラエルの王に跪け！",
+        "我が狂気が汝を襲う！",
+        "お前の聖句など見抜いてやる！"
+      ],
+      reactionLines: [
+        "フン、賢しげな小僧だ",
+        "王にその口の利き方か！",
+        "油注がれしダビデよ、覚悟せよ",
+        "その謙遜が気に入らぬ！",
+        "今日こそ決着をつける！",
+        "汝の神も我を止められぬ！",
+        "知恵は我にこそある！",
+        "聖句で惑わすつもりか？"
+      ]
+    }
+  };
+
+  let currentEnemy = 'goliath';
 
 /* =================== MUSIC =================== */
   const music = {
@@ -727,7 +979,7 @@
     { text: "つるぎをとる者はみな、つるぎで滅びる", source: "マタイ 26:52" },
     { text: "敵を愛し、迫害する者のために祈れ", source: "マタイ 5:44" },
     { text: "わたしは道であり、真理であり、命である", source: "ヨハネ 14:6" },
-    { text: "金銭を愛することは、すべての悪の根である", source: "テモテ第一 6:10" },
+    { text: "義人は信仰によって生きる", source: "ハバクク 2:4" , tricky: true },
     { text: "目には目、歯には歯", source: "出エジプト記 21:24" },
     { text: "殺してはならない", source: "出エジプト記 20:13" },
     { text: "心をつくし、精神をつくし、思いをつくして、主なるあなたの神を愛せよ", source: "マタイ 22:37" },
@@ -743,51 +995,58 @@
     { text: "神の国と神の義とをまず求めなさい", source: "マタイ 6:33" },
     { text: "明日のことを思いわずらうな。明日のことは明日自身が思いわずらうであろう", source: "マタイ 6:34" },
     { text: "人に裁かれないためには、人を裁くな", source: "マタイ 7:1" },
-    { text: "すべての人を敬いなさい。兄弟たちを愛し、神をおそれ、王を尊びなさい", source: "ペテロ第一 2:17" },
+    { text: "すべての人を敬いなさい。兄弟たちを愛し、神をおそれ、王を尊びなさい", source: "ペテロ第一 2:17" , tricky: true },
     { text: "主を恐れることは知恵のもとである", source: "箴言 1:7" },
-    { text: "望んでいる事がらを確信し、まだ見ていない事実を確認することである", source: "ヘブル 11:1" },
+    { text: "望んでいる事がらを確信し、まだ見ていない事実を確認することである", source: "ヘブル 11:1" , tricky: true },
     { text: "罪の支払う報酬は死である", source: "ローマ 6:23" },
     { text: "すべての事は、神を愛する者たちすなわち、ご計画に従って召された者たちには、共に働いて益となる", source: "ローマ 8:28" },
     { text: "何事も思いわずらってはならない", source: "ピリピ 4:6" },
-    { text: "わたしを強くして下さるかたによって、何事でもすることができる", source: "ピリピ 4:13" },
-    { text: "きよくなければ、だれも主を見ることはできない", source: "ヘブル 12:14" },
+    { text: "わたしを強くして下さるかたによって、何事でもすることができる", source: "ピリピ 4:13" , tricky: true },
+    { text: "きよくなければ、だれも主を見ることはできない", source: "ヘブル 12:14" , tricky: true },
     { text: "わたしはアルパでありオメガである、最初の者であり、最後の者である", source: "黙示録 22:13" },
-    { text: "あなたの若い日にあなたの造り主を覚えよ", source: "伝道の書 12:1" },
+    { text: "あなたの若い日にあなたの造り主を覚えよ", source: "伝道の書 12:1" , tricky: true },
     { text: "互に愛し合いなさい", source: "ヨハネ 13:34" },
     { text: "神はみずから助くる者を見捨てたまわず、むしろ自分をむなしくする者を顧みられる", source: "（参考: 神のへりくだった者への愛）" }
   ];
   const fakeVerses = [
-    { text: "天は自ら助くる者を助く", hint: "B・フランクリンの言葉。聖書ではない" },
-    { text: "沈黙は金、雄弁は銀なり", hint: "イギリスの諺。聖書ではない" },
-    { text: "急がば回れ、主の道は遠し", hint: "日本の諺に創作を足したもの" },
-    { text: "星を数える者に福あれ", hint: "完全な創作" },
-    { text: "笑う門には天国の扉が開く", hint: "日本の諺を改変した創作" },
-    { text: "鉄は熱いうちに打て、信仰は若きうちに", hint: "諺と創作の合成" },
-    { text: "金は諸悪の根源である", hint: "正しくは「金銭を愛すること」が悪の根" },
-    { text: "美しき花には棘あり、されど神の愛に棘なし", hint: "完全な創作" },
-    { text: "朝の祈りは夜の嘆きに勝る", hint: "完全な創作" },
-    { text: "月は夜を照らし、神は心を照らす", hint: "完全な創作" },
-    { text: "千里の道も一歩から、天国への道も祈りから", hint: "諺と創作の合成" },
-    { text: "汝の敵を知り、神の敵を愛せよ", hint: "創作。本物は「敵を愛せよ」" },
-    { text: "神は細部に宿る", hint: "建築家ミースの言葉。聖書ではない" },
-    { text: "時は金なり、魂はなお尊し", hint: "フランクリン+創作" },
-    { text: "ペンは剣よりも強し", hint: "ブルワー=リットンの戯曲の台詞" },
-    { text: "蒔かぬ種は生えぬ、祈らぬ者に恵みなし", hint: "諺と創作の合成" },
-    { text: "神を信じる者、恐るるに足らず", hint: "完全な創作。聖書の文言ではない" },
-    { text: "光なき場所にこそ、真の光あり", hint: "哲学的な創作" },
-    { text: "七転び八起き、信仰も同じ", hint: "日本の諺を改変した創作" },
-    { text: "人事を尽くして天命を待つ", hint: "中国の儒教的な言葉。聖書ではない" },
-    { text: "神は乗り越えられない試練を与えない", hint: "よく誤用される。聖書の直接の言葉ではない" },
-    { text: "一日一善、主もこれを喜び給う", hint: "日本の標語を改変した創作" },
-    { text: "己を知る者は賢く、神を知る者は福なり", hint: "ソクラテス風+創作" },
-    { text: "祈る者に道は開かれ、怠る者に闇が訪れる", hint: "完全な創作" },
-    { text: "天国の門は狭く、地獄の道は広し", hint: "マタイ7:13の表現を改変した創作" },
-    { text: "人は見かけによらず、神は心を見たまう", hint: "前半は諺、後半だけなら聖書的だが合成" },
-    { text: "信じる者は救われ、疑う者は沈む", hint: "後半は完全な創作" },
-    { text: "主を愛せよ、されば汝の敵も友とならん", hint: "完全な創作" }
+    { text: "天は自ら助くる者を助く", hint: "B・フランクリンの言葉。聖書ではない", speaker: "ベンジャミン・フランクリン（アメリカ建国の父）" },
+    { text: "沈黙は金、雄弁は銀なり", hint: "イギリスの諺。聖書ではない", speaker: "イギリスの諺（カーライル『衣装哲学』より）" },
+    { text: "急がば回れ、主の道は遠し", hint: "日本の諺に創作を足したもの", speaker: "日本の諺に創作を足したもの" },
+    { text: "星を数える者に福あれ", hint: "完全な創作", speaker: "完全な創作" },
+    { text: "笑う門には天国の扉が開く", hint: "日本の諺を改変した創作", speaker: "日本の諺「笑う門には福来る」の改変" },
+    { text: "鉄は熱いうちに打て、信仰は若きうちに", hint: "諺と創作の合成", speaker: "西洋の諺＋創作" },
+    { text: "金は諸悪の根源である", hint: "正しくは「金銭を愛すること」が悪の根", speaker: "テモテ6:10の誤引用。正しくは「金銭を愛すること」" , tricky: true },
+    { text: "美しき花には棘あり、されど神の愛に棘なし", hint: "完全な創作", speaker: "完全な創作" },
+    { text: "朝の祈りは夜の嘆きに勝る", hint: "完全な創作", speaker: "完全な創作" },
+    { text: "月は夜を照らし、神は心を照らす", hint: "完全な創作", speaker: "完全な創作" },
+    { text: "千里の道も一歩から、天国への道も祈りから", hint: "諺と創作の合成", speaker: "老子の言葉＋創作" },
+    { text: "汝の敵を知り、神の敵を愛せよ", hint: "創作。本物は「敵を愛せよ」", speaker: "マタイ5:44を歪めた創作" , tricky: true },
+    { text: "神は細部に宿る", hint: "建築家ミースの言葉。聖書ではない", speaker: "建築家ミース・ファン・デル・ローエの言葉" },
+    { text: "時は金なり、魂はなお尊し", hint: "フランクリン+創作", speaker: "フランクリン＋創作" },
+    { text: "ペンは剣よりも強し", hint: "ブルワー=リットンの戯曲の台詞", speaker: "ブルワー=リットン戯曲『リシュリュー』の台詞" },
+    { text: "蒔かぬ種は生えぬ、祈らぬ者に恵みなし", hint: "諺と創作の合成", speaker: "日本の諺＋創作" },
+    { text: "神を信じる者、恐るるに足らず", hint: "完全な創作。聖書の文言ではない", speaker: "聖書的に聞こえる完全な創作" , tricky: true },
+    { text: "光なき場所にこそ、真の光あり", hint: "哲学的な創作", speaker: "哲学的な創作" },
+    { text: "七転び八起き、信仰も同じ", hint: "日本の諺を改変した創作", speaker: "日本の諺の改変" },
+    { text: "人事を尽くして天命を待つ", hint: "中国の儒教的な言葉。聖書ではない", speaker: "中国の儒教思想（胡寅『読史管見』）" },
+    { text: "神は乗り越えられない試練を与えない", hint: "よく誤用される。聖書の直接の言葉ではない", speaker: "よく誤用される言葉。コリント10:13の誤解釈" , tricky: true },
+    { text: "一日一善、主もこれを喜び給う", hint: "日本の標語を改変した創作", speaker: "仏教系の標語を改変" },
+    { text: "己を知る者は賢く、神を知る者は福なり", hint: "ソクラテス風+創作", speaker: "ソクラテス「汝自身を知れ」の改変" },
+    { text: "祈る者に道は開かれ、怠る者に闇が訪れる", hint: "完全な創作", speaker: "完全な創作" },
+    { text: "天国の門は狭く、地獄の道は広し", hint: "マタイ7:13の表現を改変した創作", speaker: "マタイ7:13の表現を改変" , tricky: true },
+    { text: "人は見かけによらず、神は心を見たまう", hint: "前半は諺、後半だけなら聖書的だが合成", speaker: "前半は日本の諺、後半は聖書風の合成" , tricky: true },
+    { text: "信じる者は救われ、疑う者は沈む", hint: "後半は完全な創作", speaker: "エフェソ2:8前半＋創作" , tricky: true },
+    { text: "主を愛せよ、されば汝の敵も友とならん", hint: "完全な創作", speaker: "聖書風の完全な創作" , tricky: true },
+    { text: "おれはてっぺんとるぞ", hint: "漫画「ワンピース」ルフィの言葉。聖書ではない", speaker: "漫画『ONE PIECE』モンキー・D・ルフィの言葉" },
+    { text: "諦めたらそこで試合終了だよ", hint: "漫画「スラムダンク」安西先生の名言。聖書ではない", speaker: "漫画『SLAM DUNK』安西先生の名言" },
+    { text: "男ならだまって黙ってついてこい", hint: "漫画由来の創作。聖書ではない", speaker: "少年漫画系の創作" },
+    { text: "仲間を信じろ、それが力だ", hint: "少年漫画風の創作。聖書ではない", speaker: "少年漫画の定番セリフ" },
+    { text: "己を貫く、それが漢の生き様", hint: "北斗の拳風の創作。聖書ではない", speaker: "『北斗の拳』系の創作" },
+    { text: "強さとは、己を信じる力", hint: "ドラゴンボール風の創作。聖書ではない", speaker: "『ドラゴンボール』系の創作" },
+    { text: "諦めなければ必ず道は開ける", hint: "少年漫画の王道セリフ。聖書ではない", speaker: "少年漫画の王道セリフ" }
   ];
 
-  const MAX_HP = 100, DAMAGE_NORMAL = 10, DAMAGE_CRITICAL = 40, TURN_TIME = 7000;
+  const MAX_HP = 100, DAMAGE_NORMAL = 10, DAMAGE_CRITICAL = 40;
   let state = { phase: 'title' };
   let timerInterval = null;
 
@@ -802,8 +1061,25 @@
   }
 
   function shuffle(arr) { const a = [...arr]; for (let i=a.length-1;i>0;i--) { const j = Math.floor(Math.random()*(i+1)); [a[i],a[j]] = [a[j],a[i]]; } return a; }
-  function randomVerse() { const isReal = Math.random() < 0.5; const pool = isReal ? realVerses : fakeVerses; return { ...pool[Math.floor(Math.random()*pool.length)], isReal }; }
-  function drawHand() { const r = shuffle(realVerses).slice(0,2).map(v=>({...v,isReal:true})); const f = shuffle(fakeVerses).slice(0,2).map(v=>({...v,isReal:false})); return shuffle([...r, ...f]); }
+  function randomVerse() {
+    const isReal = Math.random() < 0.5;
+    const pool = isReal ? realVerses : fakeVerses;
+    if (enemyData().trickyMode) {
+      const tricky = pool.filter(v => v.tricky);
+      if (tricky.length > 0 && Math.random() < 0.7) {
+        return { ...tricky[Math.floor(Math.random()*tricky.length)], isReal };
+      }
+    }
+    return { ...pool[Math.floor(Math.random()*pool.length)], isReal };
+  }
+  function drawHand() {
+    // 3枚: 本物2+偽物1 or 本物1+偽物2 をランダム
+    const reals = Math.random() < 0.5 ? 2 : 1;
+    const fakes = 3 - reals;
+    const r = shuffle(realVerses).slice(0,reals).map(v=>({...v,isReal:true}));
+    const f = shuffle(fakeVerses).slice(0,fakes).map(v=>({...v,isReal:false}));
+    return shuffle([...r, ...f]);
+  }
   function wait(ms) { return new Promise(r=>setTimeout(r,ms)); }
 
   let praiseSkipResolve = null;
@@ -853,13 +1129,13 @@
           <svg class="logo-svg" viewBox="0 0 400 220" xmlns="http://www.w3.org/2000/svg">
             <defs>
               <linearGradient id="goldGrad" x1="0%" y1="0%" x2="0%" y2="100%">
-                <stop offset="0%" stop-color="#fff9e0"/>
-                <stop offset="20%" stop-color="#ffe066"/>
-                <stop offset="40%" stop-color="#f4c95d"/>
-                <stop offset="55%" stop-color="#d4a04e"/>
-                <stop offset="70%" stop-color="#8b6a2a"/>
-                <stop offset="85%" stop-color="#c9972e"/>
-                <stop offset="100%" stop-color="#fff6d5"/>
+                <stop offset="0%" stop-color="#ffffff"/>
+                <stop offset="15%" stop-color="#fff6b0"/>
+                <stop offset="35%" stop-color="#ffd966"/>
+                <stop offset="55%" stop-color="#ffc84d"/>
+                <stop offset="75%" stop-color="#e8a41c"/>
+                <stop offset="90%" stop-color="#ffe066"/>
+                <stop offset="100%" stop-color="#ffffff"/>
               </linearGradient>
               <linearGradient id="redGrad" x1="0%" y1="0%" x2="0%" y2="100%">
                 <stop offset="0%" stop-color="#ff6b6b"/>
@@ -902,7 +1178,7 @@
                     font-family="'Hiragino Mincho ProN', 'Yu Mincho', serif"
                     font-size="56" font-weight="900"
                     fill="url(#goldGrad)"
-                    stroke="#2a1810" stroke-width="2"
+                    stroke="#4a2810" stroke-width="1.5"
                     letter-spacing="2">バイブル</text>
             </g>
             
@@ -920,7 +1196,7 @@
                     font-family="'Hiragino Mincho ProN', 'Yu Mincho', serif"
                     font-size="56" font-weight="900"
                     fill="url(#goldGrad)"
-                    stroke="#2a1810" stroke-width="2"
+                    stroke="#4a2810" stroke-width="1.5"
                     letter-spacing="2">ドッヂ</text>
             </g>
             
@@ -947,11 +1223,12 @@
           ・先に相手のHPをゼロにしたら勝利
         </div>
         <button class="main-btn" onclick="startGame()">戦いを始める</button>
+        <div class="title-ball"></div>
       </div>`;
   }
 
   function renderBattle() {
-    const php = (state.playerHP/MAX_HP)*100, ehp = (state.enemyHP/MAX_HP)*100;
+    const php = (state.playerHP/MAX_HP)*100, ehp = (state.enemyHP/(state.enemyMaxHP||MAX_HP))*100;
     const pc = php<25?'critical':php<50?'low':'', ec = ehp<25?'critical':ehp<50?'low':'';
     app.innerHTML = `
       ${soundToggleHTML()}
@@ -963,7 +1240,7 @@
             <div class="hp-text">${state.playerHP} / ${MAX_HP}</div>
           </div>
           <div class="hp-bar-wrap">
-            <div class="hp-label" style="text-align:right">ゴリアテ ⚔️</div>
+            <div class="hp-label" style="text-align:right">${enemyData().name} ⚔️</div>
             <div class="hp-bar-outer"><div class="hp-bar-inner ${ec}" style="width:${ehp}%"></div></div>
             <div class="hp-text">${state.enemyHP} / ${MAX_HP}</div>
           </div>
@@ -1082,8 +1359,8 @@
           <div class="character enemy idle" id="enemyChar">
             <div class="aura"></div>
             <div class="shadow"></div>
-            <img class="body" src="${GOLIATH_IMG}" alt="ゴリアテ">
-            <div class="name">ゴリアテ</div>
+            <img class="body" src="${enemyData().img}" alt="${enemyData().name}">
+            <div class="name">${enemyData().name}</div>
           </div>
           <div class="ball" id="ball"></div>
         </div>
@@ -1143,7 +1420,7 @@
   }
 
   function updateHPBars() {
-    const php = (state.playerHP/MAX_HP)*100, ehp = (state.enemyHP/MAX_HP)*100;
+    const php = (state.playerHP/MAX_HP)*100, ehp = (state.enemyHP/(state.enemyMaxHP||MAX_HP))*100;
     const bars = document.querySelectorAll('.hp-bar-inner'), texts = document.querySelectorAll('.hp-text');
     if (bars[0]) { bars[0].style.width = php+'%'; bars[0].className = 'hp-bar-inner ' + (php<25?'critical':php<50?'low':''); }
     if (bars[1]) { bars[1].style.width = ehp+'%'; bars[1].className = 'hp-bar-inner ' + (ehp<25?'critical':ehp<50?'low':''); }
@@ -1224,34 +1501,11 @@
     "恐るるに足らず！",
     "この石に神の力を込める",
     "主は我が力、我が盾！",
-    "汝の首、主に献げん！",
     "見よ、主の業を！",
     "御言葉はわが剣なり",
     "主よ、導き給え！",
     "信仰は勝利の鍵！",
     "真理は盾となる"
-  ];
-  const goliathResponses = [
-    "小僧が...面白い！",
-    "ふん、笑止千万！",
-    "神だと？見せてみろ！",
-    "その石で何ができる？",
-    "貴様を粉々にしてやる！",
-    "イスラエルの子供よ、覚悟せよ",
-    "ぬかせ小童！",
-    "貴様の神はどこにいる？",
-    "潰してくれるわ！",
-    "ハハハ！面白い見世物だ",
-    "その痩せ腕で何をする？",
-    "恐れを知らぬ愚か者よ"
-  ];
-  const goliathLines = [
-    "我が力を見よ！",
-    "ペリシテの威光、思い知れ！",
-    "イスラエルの神に挑戦する！",
-    "小僧、これが最後だ！",
-    "我が前にひれ伏せ！",
-    "貴様を野の獣に喰わせてやる！"
   ];
   const davidResponses = [
     "主の力は偉大なり！",
@@ -1261,6 +1515,8 @@
     "ハレルヤ！",
     "神の言葉は最強の武器！"
   ];
+  // 敵固有のセリフはenemiesオブジェクトから取得
+  function enemyData() { return enemies[currentEnemy]; }
 
   function pickLine(arr) { return arr[Math.floor(Math.random()*arr.length)]; }
 
@@ -1293,14 +1549,7 @@
     { text: "主がわたしと共におられる、何を恐れようか", ref: "詩篇 27:1" },
     { text: "主は力、主は救い", ref: "詩篇 118:14" }
   ];
-  const goliathCutinQuotes = [
-    { text: "小童よ、我が剣の錆となれ！", ref: "ペリシテの大将" },
-    { text: "我が名はゴリアテ、イスラエルの軍を侮る者！", ref: "Iサムエル 17:10" },
-    { text: "その石ころで何ができると言うのだ？", ref: "ペリシテの大将" },
-    { text: "貴様の肉を空の鳥と野の獣にくれてやる！", ref: "Iサムエル 17:44" },
-    { text: "我は汝らの神をも恐れぬ！", ref: "ペリシテの大将" },
-    { text: "来たれ小僧、引導を渡してやろう！", ref: "ペリシテの大将" }
-  ];
+  // Goliathの台詞は enemies.goliath.cutinQuotes 参照
 
   function pickCutin(arr) { return arr[Math.floor(Math.random()*arr.length)]; }
 
@@ -1312,10 +1561,11 @@
       if (!container || !portrait || !quote) { resolve(); return; }
 
       const isPlayer = who === 'player';
-      const pool = isPlayer ? davidCutinQuotes : goliathCutinQuotes;
+      const enemy = enemyData();
+      const pool = isPlayer ? davidCutinQuotes : enemy.cutinQuotes;
       const q = pickCutin(pool);
-      const imgUrl = isPlayer ? DAVID_IMG : GOLIATH_IMG;
-      const name = isPlayer ? 'ダビデ' : 'ゴリアテ';
+      const imgUrl = isPlayer ? DAVID_IMG : enemy.img;
+      const name = isPlayer ? 'ダビデ' : enemy.name;
 
       portrait.style.setProperty('--portrait-img', `url(${imgUrl})`);
       container.classList.remove('left-side', 'right-side');
@@ -1334,12 +1584,8 @@
 
   /* === SPECIAL MOVE (必殺技) === */
   const davidSpecials = [
-    { name: "エホバニッシ", subtitle: "- THE LORD IS MY BANNER -" },
-    { name: "アドナイ・イルエ", subtitle: "- THE LORD WILL PROVIDE -" },
-    { name: "エル・シャダイ", subtitle: "- GOD ALMIGHTY -" },
-    { name: "インマヌエル", subtitle: "- GOD WITH US -" },
-    { name: "エホバ・シャローム", subtitle: "- THE LORD IS PEACE -" },
-    { name: "アドナイ・ツィドケヌ", subtitle: "- THE LORD OUR RIGHTEOUSNESS -" }
+    { name: "アドナイエレ", subtitle: "- THE LORD WILL PROVIDE -" },
+    { name: "エホバニッシ",  subtitle: "- THE LORD IS MY BANNER -" }
   ];
 
   function showSpecialMove() {
@@ -1472,7 +1718,8 @@
   function startGame() {
     sfx.ensureCtx();
     if (sound.enabled) music.playTrack('battle');
-    state = { phase: 'battle', playerHP: MAX_HP, enemyHP: MAX_HP, hand: drawHand() };
+    currentEnemy = 'goliath';
+    state = { phase: 'battle', playerHP: MAX_HP, enemyHP: enemyData().hpMax, enemyMaxHP: enemyData().hpMax, hand: drawHand(), history: [] };
     render();
     playerTurnStart();
   }
@@ -1480,10 +1727,9 @@
   async function playerTurnStart() {
     showTurnIndicator('ダビデのターン');
     await wait(1200);
-    // ダビデが意気込み → ゴリアテが反応
     showBubble('player', pickLine(davidLines), 1600);
     await wait(900);
-    showBubble('enemy', pickLine(goliathResponses), 1400);
+    showBubble('enemy', pickLine(enemyData().reactionLines), 1400);
     await wait(900);
     state.phase = 'playerTurn';
     renderControlPanel();
@@ -1496,7 +1742,7 @@
     await performThrow('player');
     state.phase = 'enemyJudging'; renderControlPanel();
     await wait(900);
-    const enemyCorrect = Math.random() < 0.6;
+    const enemyCorrect = Math.random() < enemyData().aiCorrectRate;
     const enemyAnswer = enemyCorrect ? verse.isReal : !verse.isReal;
     hideVerseDisplay();
     if (enemyCorrect) {
@@ -1512,6 +1758,16 @@
       setTimeout(() => { if (state.enemyHP > 0) setAnim('player','celebrate',1000); }, 800);
       state.lastResult = { crit: true, message: `💥 CRITICAL!!<br>ゴリアテは「${enemyAnswer?'〇':'×'}」と回答！不正解！${DAMAGE_CRITICAL}ダメージ！`, source: verse.isReal ? `📖 ${verse.source}` : `💡 ${verse.hint}` };
     }
+    // ダビデが投げた聖句を履歴に記録（正しく分類できたか）
+    if (!state.history) state.history = [];
+    state.history.push({
+      verse: verse,
+      isReal: verse.isReal,
+      thrownAsReal: verse.isReal, // the card was correctly labeled
+      correct: true, // if David threw knowing card's tag, it's always "correct" knowledge
+      judgedBy: 'throw',
+      enemy: currentEnemy
+    });
     const ir = Math.random() < 0.5;
     const pool = ir ? realVerses : fakeVerses;
     state.hand[handIndex] = { ...pool[Math.floor(Math.random()*pool.length)], isReal: ir };
@@ -1522,11 +1778,11 @@
   }
 
   async function enemyTurn() {
-    showTurnIndicator('ゴリアテのターン');
+    const enemy = enemyData();
+    showTurnIndicator(enemy.name + 'のターン');
     await wait(1400);
     state.phase = 'enemyThrow'; renderControlPanel();
-    // ゴリアテが意気込み → ダビデが返答
-    showBubble('enemy', pickLine(goliathLines), 1600);
+    showBubble('enemy', pickLine(enemy.threatLines), 1600);
     await wait(900);
     showBubble('player', pickLine(davidResponses), 1400);
     await wait(800);
@@ -1540,6 +1796,7 @@
 
   function startTimer() {
     const start = Date.now();
+    const TURN_TIME = enemyData().turnTime;
     timerInterval = setInterval(() => {
       const remaining = Math.max(0, TURN_TIME - (Date.now()-start));
       const bar = document.getElementById('timerBar'); if (bar) bar.style.width = (remaining/TURN_TIME*100)+'%';
@@ -1566,6 +1823,28 @@
       applyHit('player', true);
       setTimeout(() => { if (state.playerHP > 0) setAnim('enemy','celebrate',1000); }, 800);
       state.lastResult = { crit: true, message: `💥 CRITICAL!!<br>不正解！${DAMAGE_CRITICAL}ダメージ！`, source: verse.isReal ? `📖 本物: ${verse.source}` : `💡 偽物: ${verse.hint}` };
+    }
+    // ダビデが判定した聖句を履歴に記録
+    if (!state.history) state.history = [];
+    if (answer !== null) {
+      state.history.push({
+        verse: verse,
+        isReal: verse.isReal,
+        playerAnswer: answer,
+        correct: (answer === verse.isReal),
+        judgedBy: 'player',
+        enemy: currentEnemy
+      });
+    } else {
+      state.history.push({
+        verse: verse,
+        isReal: verse.isReal,
+        playerAnswer: null,
+        correct: false,
+        judgedBy: 'player',
+        enemy: currentEnemy,
+        timeout: true
+      });
     }
     state.phase = 'result'; renderControlPanel();
     await wait(3000);
@@ -1605,18 +1884,172 @@
     endGame(win);
   }
 
-  function endGame(win) { state.phase = 'gameover'; state.win = win; render(); }
+  
+  async function advanceToSaul() {
+    const arena = document.getElementById('arena');
+    if (!arena) return;
+    const narration = document.createElement('div');
+    narration.className = 'turn-indicator';
+    narration.style.cssText = 'animation: none; opacity: 1; transform: translate(-50%, -50%); font-size: 1.05rem; line-height: 1.8; max-width: 90%; white-space: normal; padding: 20px 24px; text-align: center;';
+    narration.innerHTML = '巨人を倒したダビデ...<br>しかしその名声を妬む者が現れた<br><br><b style="color:#ff8a8a; font-size: 1.3rem;">イスラエル王 サウロ</b><br><span style="font-size:0.85rem; opacity:0.85;">嫉妬に狂う王が立ちはだかる</span>';
+    arena.appendChild(narration);
+    await wait(4500);
+    narration.remove();
+
+    currentEnemy = 'saul';
+    const enemy = enemyData();
+    state.playerHP = MAX_HP;
+    state.enemyHP = enemy.hpMax;
+    state.enemyMaxHP = enemy.hpMax;
+    state.hand = drawHand();
+    state.phase = 'battle';
+    render();
+    playerTurnStart();
+  }
+
+  function endGame(win) {
+    state.phase = 'gameover';
+    state.win = win;
+    render();
+  }
 
   function renderGameOver() {
+    // 成績発表画面
+    const history = state.history || [];
+    // プレイヤーが判定した聖句のみ集計（投げたカードは除く）
+    const judged = history.filter(h => h.judgedBy === 'player');
+    const correct = judged.filter(h => h.correct);
+    const wrong = judged.filter(h => !h.correct);
+    const correctRate = judged.length > 0 ? Math.round(correct.length / judged.length * 100) : 0;
+
+    // 正解した聖句（本物のみピックアップ：印象深いものを学べる）
+    const correctReal = correct.filter(h => h.isReal);
+    // 間違えた聖句
+    const wrongList = wrong;
+
+    // ランク判定
+    let rank = 'C', rankColor = '#fb923c', rankComment = '';
+    if (state.win) {
+      if (correctRate >= 90) { rank = 'S'; rankColor = '#fbbf24'; rankComment = 'ダビデの如き信仰！聖書の知者よ。'; }
+      else if (correctRate >= 75) { rank = 'A'; rankColor = '#4ade80'; rankComment = '見事な聖句の使い手である。'; }
+      else if (correctRate >= 60) { rank = 'B'; rankColor = '#60a5fa'; rankComment = '聖書への学びを深めよ。'; }
+      else { rank = 'C'; rankColor = '#fb923c'; rankComment = '勝利はしたが、なお聖書を読み続けよ。'; }
+    } else {
+      rank = 'F'; rankColor = '#dc2626'; rankComment = '敗れても立ち上がれ。ダビデもそうしたように。';
+    }
+
+    // ダビデのエピソード集 (読みたくなる誘い)
+    const davidEpisodes = [
+      {
+        title: '少年ダビデの石投げ',
+        body: 'ダビデは兄たちに食事を届けに来ただけの羊飼いの少年だった。しかしゴリアテの挑戦を聞き、「生ける神の軍を侮る者を、誰も恐れてはならない」と立ち上がった。サウル王から授かる鎧を脱ぎ捨て、川で五つの滑らかな石を拾い、ただ一つの石で巨人を倒した。その時彼は叫んだ——「戦いは主のものである」と。',
+        ref: '→ サムエル記上 17章 を読もう'
+      },
+      {
+        title: 'サウル王への憐れみ',
+        body: 'ダビデを殺そうと追跡していたサウル王。ある日サウルは洞窟に入り、その奥でダビデが息を潜めていた。部下たちは「今がチャンスだ」と囁いたが、ダビデはサウルの上着の裾を切り取るに留めた。「主の油そそがれた者に手をかけてはならない」——敵であっても神の立てた者を尊んだのだ。',
+        ref: '→ サムエル記上 24章 を読もう'
+      },
+      {
+        title: 'ダビデ王の罪と悔い改め',
+        body: '偉大な王となったダビデもまた罪を犯した。部下ウリヤの妻バテ・シバを奪い、ウリヤを戦死させたのだ。預言者ナタンに罪を告発された時、ダビデは言い訳をせず、ただ「わたしは主に対して罪を犯した」と認めた。この悔い改めから生まれたのが、あの有名な詩篇51編である。',
+        ref: '→ サムエル記下 11-12章、詩篇 51編 を読もう'
+      },
+      {
+        title: 'ダビデと契約の箱',
+        body: 'エルサレムに神の契約の箱を運ぶ時、ダビデは王の威厳をかなぐり捨てて力のかぎり踊った。妻ミカルは「王としてみっともない」と軽蔑したが、ダビデは答えた——「主の御前で踊ったのだ。私はさらに卑しくもなろう」。神を讃える心に、体裁は要らない。',
+        ref: '→ サムエル記下 6章 を読もう'
+      },
+      {
+        title: '息子アブサロムの反逆',
+        body: '愛する息子アブサロムが王位を奪うために反乱を起こした時、ダビデは泣きながらエルサレムを離れた。戦いは勝利したが、息子は戦死してしまう。「わが子アブサロムよ、わが子よ、わが子アブサロムよ。ああ、わたしが代わりに死ねばよかったのに」——この嘆きは、神の愛を映す鏡でもある。',
+        ref: '→ サムエル記下 15-18章 を読もう'
+      },
+      {
+        title: '詩篇23篇——羊飼いの詩',
+        body: '羊飼いだった少年が王となり、晩年に綴った詩。「主はわたしの牧者であって、わたしには乏しいことがない」。どれほどの試練を経ても、ダビデは主に全てを委ね続けた。この詩篇は今も、世界中で葬儀、結婚式、日々の祈りに読まれ続けている最も愛された詩の一つ。',
+        ref: '→ 詩篇 23篇 を読もう'
+      },
+      {
+        title: 'ヨナタンとの友情',
+        body: 'サウル王の息子ヨナタン。彼は父の敵ダビデと、魂と魂で結ばれる友情を結んだ。自分の王位を捨ててでもダビデを守った。ヨナタンが戦死した時、ダビデは哀歌を詠んだ——「兄弟ヨナタンよ、わたしはあなたを慕う。あなたがわたしを愛することは世の常でなかった」。真の友情の形がここにある。',
+        ref: '→ サムエル記上 18-20章、サムエル記下 1章 を読もう'
+      }
+    ];
+    const episode = davidEpisodes[Math.floor(Math.random() * davidEpisodes.length)];
+
+    // HTML組み立て
+    let correctSection = '';
+    if (correctReal.length > 0) {
+      correctSection = `
+        <div class="result-section correct">
+          <h3>✨ 見抜いた本物の聖句</h3>
+          ${correctReal.slice(0, 6).map(h => `
+            <div class="verse-item">
+              <div class="verse-text">「${h.verse.text}」</div>
+              <div class="verse-meta">📖 ${h.verse.source}</div>
+            </div>`).join('')}
+          ${correctReal.length > 6 ? `<div class="verse-more">他 ${correctReal.length - 6} 節...</div>` : ''}
+        </div>`;
+    }
+
+    let wrongSection = '';
+    if (wrongList.length > 0) {
+      wrongSection = `
+        <div class="result-section wrong">
+          <h3>💡 誤った聖句（これは誰の言葉？）</h3>
+          ${wrongList.map(h => {
+            const attribution = h.isReal
+              ? `📖 実は聖書の言葉：${h.verse.source}`
+              : `👤 ${h.verse.speaker || h.verse.hint || '聖書ではない'}`;
+            return `
+              <div class="verse-item">
+                <div class="verse-text">「${h.verse.text}」</div>
+                <div class="verse-meta">${attribution}</div>
+              </div>`;
+          }).join('')}
+        </div>`;
+    }
+
     app.innerHTML = `
       ${soundToggleHTML()}
-      <div class="gameover-screen">
-        <div class="gover-icon">${state.win?'🏆':'💀'}</div>
-        <h2 class="${state.win?'win':'lose'}">${state.win?'勝利！':'敗北...'}</h2>
-        <p class="comment">
-          ${state.win ? 'ダビデは主に賛美を捧げた！<br>「戦いは主のものなり」<br>主の御名によりて、巨人は倒れたり。' : 'ゴリアテの前に敗れた...<br>聖句の学びを深め、再び挑もう。'}
-        </p>
-        <button class="main-btn" onclick="returnToTitle()">もう一度</button>
+      <div class="results-screen">
+        <div class="results-header">
+          <div class="gover-icon-small">${state.win?'🏆':'💀'}</div>
+          <h2 class="results-title ${state.win?'win':'lose'}">${state.win?'勝利！':'敗北...'}</h2>
+          <p class="results-subtitle">${state.win ? (currentEnemy === 'saul' ? '巨人と狂王の双方を打ち倒せり' : 'ダビデは主の名によりて勝利せり') : (currentEnemy === 'saul' ? '狂王サウロの前に敗れた...' : 'ゴリアテの前に敗れた...')}</p>
+        </div>
+
+        <div class="rank-display">
+          <div class="rank-label">RANK</div>
+          <div class="rank-letter" style="color:${rankColor}; text-shadow: 0 0 30px ${rankColor}">${rank}</div>
+          <div class="rank-stats">
+            <div><span class="stat-num" style="color:#4ade80">${correct.length}</span><span class="stat-lbl">正解</span></div>
+            <div class="stat-divider">/</div>
+            <div><span class="stat-num" style="color:#f87171">${wrong.length}</span><span class="stat-lbl">誤答</span></div>
+            <div class="stat-divider">→</div>
+            <div><span class="stat-num" style="color:${rankColor}">${correctRate}%</span></div>
+          </div>
+          <div class="rank-comment">${rankComment}</div>
+        </div>
+
+        ${correctSection}
+        ${wrongSection}
+
+        <div class="episode-card">
+          <div class="episode-label">📜 ダビデのエピソード</div>
+          <h3 class="episode-title">${episode.title}</h3>
+          <p class="episode-body">${episode.body}</p>
+          <p class="episode-ref">${episode.ref}</p>
+        </div>
+
+        <div class="closing-msg">
+          ${state.win
+            ? 'ダビデは勝利した。しかし聖書にはさらに深い物語が刻まれている。<br>是非、聖書を開いてみよう。主の言葉は、あなたの心を強くする。'
+            : 'ダビデもまた、何度も倒れた。しかしその度に主に立ち返った。<br>聖書の言葉をもう一度学び、再び挑もう。'}
+        </div>
+
+        <button class="main-btn" onclick="returnToTitle()">タイトルへ戻る</button>
       </div>`;
   }
 
