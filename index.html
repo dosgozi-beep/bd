@@ -676,6 +676,51 @@
     font-style: italic;
   }
 
+
+  .next-battle-warning {
+    background: linear-gradient(180deg, rgba(139,21,21,0.35) 0%, rgba(60,10,10,0.5) 100%);
+    border: 2px solid #dc2626;
+    border-radius: 10px;
+    padding: 14px 18px;
+    max-width: 360px;
+    width: 100%;
+    color: #ffcccc;
+    font-size: 0.88rem;
+    line-height: 1.7;
+    text-align: center;
+    box-shadow: 0 0 20px rgba(220,38,38,0.4), 0 4px 12px rgba(0,0,0,0.6);
+    animation: warningPulse 1.8s ease-in-out infinite;
+  }
+  .next-battle-warning b {
+    color: #ff8a8a;
+    font-size: 1.1rem;
+    letter-spacing: 0.1em;
+  }
+  @keyframes warningPulse {
+    0%,100% { box-shadow: 0 0 20px rgba(220,38,38,0.4), 0 4px 12px rgba(0,0,0,0.6); }
+    50%     { box-shadow: 0 0 32px rgba(220,38,38,0.8), 0 4px 12px rgba(0,0,0,0.6); }
+  }
+  .main-btn.next-battle-btn {
+    background: linear-gradient(180deg, #dc2626 0%, #7c1515 100%);
+    border-color: #ff8a8a;
+    color: #fff6d5;
+    box-shadow: 0 4px 0 #3a0808, 0 8px 24px rgba(220,38,38,0.5);
+    animation: battleBtnGlow 2s ease-in-out infinite;
+  }
+  .main-btn.next-battle-btn:active {
+    box-shadow: 0 2px 0 #3a0808;
+  }
+  @keyframes battleBtnGlow {
+    0%,100% { box-shadow: 0 4px 0 #3a0808, 0 8px 24px rgba(220,38,38,0.5); }
+    50%     { box-shadow: 0 4px 0 #3a0808, 0 8px 32px rgba(220,38,38,0.9); }
+  }
+  .main-btn.sub-btn {
+    background: linear-gradient(180deg, #8b6a2a 0%, #4a3514 100%);
+    font-size: 0.88rem;
+    padding: 10px 28px;
+    margin-top: -4px;
+  }
+
   .gameover-screen { text-align: center; padding: 60px 20px; min-height: 100vh; background: linear-gradient(180deg, rgba(26,15,8,0.7), rgba(26,15,8,0.95)), url("./background.jpg") center/cover; display: flex; flex-direction: column; justify-content: center; align-items: center; }
   .gameover-screen .gover-icon { font-size: 4rem; color: #f4c95d; margin: 6px 0; text-shadow: 0 0 24px rgba(244,201,93,0.8); }
   .gameover-screen h2 { font-size: 2.4rem; margin-bottom: 12px; letter-spacing: 0.2em; text-shadow: 3px 3px 0 #1a0f08, 0 0 24px currentColor; }
@@ -739,10 +784,11 @@
     saul: {
       name: "サウロ",
       img: "./saul.png",
-      hpMax: 140,  // 高HP
-      turnTime: 4500,  // 短い判定時間
-      aiCorrectRate: 0.8,  // 賢い
-      trickyMode: true,  // 紛らわしい聖句を優先
+      hpMax: 160,  // 高HP (ゴリアテ100 → サウロ160)
+      turnTime: 4000,  // 判定時間が短い (ゴリアテ7秒 → サウロ4秒)
+      aiCorrectRate: 0.85,  // 賢い (ゴリアテ60% → サウロ85%)
+      trickyMode: true,  // 紛らわしい聖句を90%で出題
+      trickyRate: 0.9,
       cutinQuotes: [
         { text: "わたしは、わたしが何をしているか、自分でわからない", ref: "ローマ 7:15" },
         { text: "若造、王である我に逆らうのか！", ref: "サウロ王" },
@@ -1066,7 +1112,8 @@
     const pool = isReal ? realVerses : fakeVerses;
     if (enemyData().trickyMode) {
       const tricky = pool.filter(v => v.tricky);
-      if (tricky.length > 0 && Math.random() < 0.7) {
+      const rate = enemyData().trickyRate || 0.7;
+      if (tricky.length > 0 && Math.random() < rate) {
         return { ...tricky[Math.floor(Math.random()*tricky.length)], isReal };
       }
     }
@@ -1858,22 +1905,24 @@
     const loseEl = document.getElementById(win?'enemyChar':'playerChar');
     if (winEl) { clearAnim(winEl); winEl.classList.add('victory'); }
     if (loseEl) { clearAnim(loseEl); loseEl.classList.add('defeated'); }
+
     if (win) {
+      // 勝利時: 全ての敵で賛美ダンス演出
       state.phase = 'praising'; renderControlPanel();
       music.playJingle('victory'); showDivineLight();
-      // ダビデの激しいダンスモード
       const davidEl = document.getElementById('playerChar');
       if (davidEl) { clearAnim(davidEl); davidEl.classList.add('dancing'); }
-      // 羊たちが登場して一緒に踊る
       spawnDancingSheep();
-      // ラップ賛美歌に合わせて音符を波状に
       spawnMusicNotes(14);
       setTimeout(() => spawnMusicNotes(14), 3000);
       setTimeout(() => spawnMusicNotes(14), 6000);
-      setTimeout(() => spawnMusicNotes(14), 9000);
-      setTimeout(() => spawnMusicNotes(14), 12000);
-      // 賛美時間を確保 (スキップ可能)
-      await waitForSkipOrTimeout(18000);
+      // ゴリアテ撃破時は短めに (もう一戦あるので)、サウロ撃破時は長く
+      const praiseDuration = (currentEnemy === 'goliath') ? 9000 : 18000;
+      if (currentEnemy !== 'goliath') {
+        setTimeout(() => spawnMusicNotes(14), 9000);
+        setTimeout(() => spawnMusicNotes(14), 12000);
+      }
+      await waitForSkipOrTimeout(praiseDuration);
       clearSheep();
       if (davidEl) davidEl.classList.remove('dancing');
       state.phase = 'gameover';
@@ -1886,26 +1935,32 @@
 
   
   async function advanceToSaul() {
-    const arena = document.getElementById('arena');
-    if (!arena) return;
-    const narration = document.createElement('div');
-    narration.className = 'turn-indicator';
-    narration.style.cssText = 'animation: none; opacity: 1; transform: translate(-50%, -50%); font-size: 1.05rem; line-height: 1.8; max-width: 90%; white-space: normal; padding: 20px 24px; text-align: center;';
-    narration.innerHTML = '巨人を倒したダビデ...<br>しかしその名声を妬む者が現れた<br><br><b style="color:#ff8a8a; font-size: 1.3rem;">イスラエル王 サウロ</b><br><span style="font-size:0.85rem; opacity:0.85;">嫉妬に狂う王が立ちはだかる</span>';
-    arena.appendChild(narration);
-    await wait(4500);
-    narration.remove();
-
+    // 成績画面から呼び出される。サウロ戦に突入
     currentEnemy = 'saul';
     const enemy = enemyData();
     state.playerHP = MAX_HP;
     state.enemyHP = enemy.hpMax;
     state.enemyMaxHP = enemy.hpMax;
     state.hand = drawHand();
+    state.history = [];  // サウロ戦用に履歴リセット (後でマージしたければ別プロパティに退避)
     state.phase = 'battle';
+    if (sound.enabled) music.playTrack('battle');
     render();
+
+    // ナレーション演出
+    const arena = document.getElementById('arena');
+    if (arena) {
+      const narration = document.createElement('div');
+      narration.className = 'turn-indicator';
+      narration.style.cssText = 'animation: none; opacity: 1; transform: translate(-50%, -50%); font-size: 1.05rem; line-height: 1.8; max-width: 90%; white-space: normal; padding: 20px 24px; text-align: center;';
+      narration.innerHTML = '巨人を倒したダビデ...<br>しかしその名声を妬む者が現れた<br><br><b style="color:#ff8a8a; font-size: 1.3rem;">イスラエル王 サウロ</b><br><span style="font-size:0.85rem; opacity:0.85;">嫉妬に狂う王が立ちはだかる</span>';
+      arena.appendChild(narration);
+      await wait(4500);
+      narration.remove();
+    }
     playerTurnStart();
   }
+  window.advanceToSaul = advanceToSaul;
 
   function endGame(win) {
     state.phase = 'gameover';
@@ -2045,11 +2100,21 @@
 
         <div class="closing-msg">
           ${state.win
-            ? 'ダビデは勝利した。しかし聖書にはさらに深い物語が刻まれている。<br>是非、聖書を開いてみよう。主の言葉は、あなたの心を強くする。'
+            ? (currentEnemy === 'goliath'
+                ? '巨人ゴリアテを打ち倒したダビデ。<br>だがここから、真の試練が始まる——。'
+                : 'ダビデは勝利した。しかし聖書にはさらに深い物語が刻まれている。<br>是非、聖書を開いてみよう。主の言葉は、あなたの心を強くする。')
             : 'ダビデもまた、何度も倒れた。しかしその度に主に立ち返った。<br>聖書の言葉をもう一度学び、再び挑もう。'}
         </div>
 
-        <button class="main-btn" onclick="returnToTitle()">タイトルへ戻る</button>
+        ${(state.win && currentEnemy === 'goliath') ? `
+          <div class="next-battle-warning">
+            ⚠️ しかし油断するな。次なる敵は<br><b>イスラエル王サウロ</b>。<br>問題は紛らわしく、判定時間も短い！
+          </div>
+          <button class="main-btn next-battle-btn" onclick="advanceToSaul()">⚔️ 次の戦いに挑む</button>
+          <button class="main-btn sub-btn" onclick="returnToTitle()">タイトルへ戻る</button>
+        ` : `
+          <button class="main-btn" onclick="returnToTitle()">タイトルへ戻る</button>
+        `}
       </div>`;
   }
 
